@@ -92,21 +92,6 @@
                     @actionExecuted="handleActionExecuted"
                     ref="resourceTable"
                 />
-
-                <ResourcePagination
-                    v-if="shouldShowPagination"
-                    :pagination-component="paginationComponent"
-                    :has-next-page="hasNextPage"
-                    :has-previous-page="hasPreviousPage"
-                    :load-more="loadMore"
-                    :select-page="selectPage"
-                    :total-pages="totalPages"
-                    :current-page="page"
-                    :per-page="perPage"
-                    :resource-count-label="resourceCountLabel"
-                    :current-resource-count="resourceCount"
-                    :all-matching-resource-count="allMatchingResourceCount"
-                />
             </template>
         </LoadingView>
     </Card>
@@ -120,7 +105,7 @@
         mapProps,
         InteractsWithQueryString,
     } from '@/mixins';
-    import ResourceTable from '../components/ResourceTable';
+    import ResourceTable from '@/components/ResourceTable';
     import ResourceTableToolbar from '../components/ResourceTableToolbar';
 
     import { computed } from 'vue';
@@ -442,16 +427,16 @@
                 return Nova.request()
                     .get(
                         '/nova-api/' +
-                            this.resourceName +
-                            '/relate-authorization' +
-                            '?viaResource=' +
-                            this.viaResource +
-                            '&viaResourceId=' +
-                            this.viaResourceId +
-                            '&viaRelationship=' +
-                            this.viaRelationship +
-                            '&relationshipType=' +
-                            this.relationshipType,
+                        this.resourceName +
+                        '/relate-authorization' +
+                        '?viaResource=' +
+                        this.viaResource +
+                        '&viaResourceId=' +
+                        this.viaResourceId +
+                        '&viaRelationship=' +
+                        this.viaRelationship +
+                        '&relationshipType=' +
+                        this.relationshipType,
                     )
                     .then(response => {
                         this.authorizedToRelate = response.data.authorized;
@@ -655,12 +640,12 @@
             async initializeState(onCreated) {
                 (onCreated || this.expandableStoreQuery) && this.queryStringFilterParameterValue
                     ? await this.$store.dispatch(
-                          `${this.resourceName}/initializeCurrentFilterValuesFromQueryString`,
-                          this.queryStringFilterParameterValue,
-                      )
+                        `${this.resourceName}/initializeCurrentFilterValuesFromQueryString`,
+                        this.queryStringFilterParameterValue,
+                    )
                     : await this.$store.dispatch(`${this.resourceName}/resetFilterState`, {
-                          resourceName: this.resourceName,
-                      });
+                        resourceName: this.resourceName,
+                    });
             },
 
             /**
@@ -815,9 +800,9 @@
             canShowDeleteMenu() {
                 return Boolean(
                     this.authorizedToDeleteSelectedResources ||
-                        this.authorizedToForceDeleteSelectedResources ||
-                        this.authorizedToRestoreSelectedResources ||
-                        this.selectAllMatchingChecked,
+                    this.authorizedToForceDeleteSelectedResources ||
+                    this.authorizedToRestoreSelectedResources ||
+                    this.selectAllMatchingChecked,
                 );
             },
 
