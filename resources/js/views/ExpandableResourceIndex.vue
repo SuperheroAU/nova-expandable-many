@@ -1,54 +1,5 @@
 <template>
     <Card v-if="!shouldBeCollapsed">
-        <ResourceTableToolbar
-            :all-matching-resource-count="allMatchingResourceCount"
-            :authorized-to-delete-any-resources="authorizedToDeleteAnyResources"
-            :authorized-to-delete-selected-resources="authorizedToDeleteSelectedResources"
-            :authorized-to-force-delete-any-resources="authorizedToForceDeleteAnyResources"
-            :authorized-to-force-delete-selected-resources="authorizedToForceDeleteSelectedResources"
-            :authorized-to-restore-any-resources="authorizedToRestoreAnyResources"
-            :authorized-to-restore-selected-resources="authorizedToRestoreSelectedResources"
-            :clear-selected-filters="clearSelectedFilters"
-            :close-delete-modal="closeDeleteModal"
-            :currently-polling="currentlyPolling"
-            :current-page-count="resources.length"
-            :delete-all-matching-resources="deleteAllMatchingResources"
-            :delete-selected-resources="deleteSelectedResources"
-            :filter-changed="filterChanged"
-            :force-delete-all-matching-resources="forceDeleteAllMatchingResources"
-            :force-delete-selected-resources="forceDeleteSelectedResources"
-            :has-filters="hasFilters"
-            :loading="resourceResponse && loading"
-            :per-page="perPage"
-            :per-page-options="perPageOptions"
-            :resources="resources"
-            :resource-information="resourceInformation"
-            :resource-name="resourceName"
-            :restore-all-matching-resources="restoreAllMatchingResources"
-            :restore-selected-resources="restoreSelectedResources"
-            :select-all-matching-checked="selectAllMatchingResources"
-            @deselect="clearResourceSelections"
-            :selected-resources="selectedResources"
-            :should-show-checkboxes="shouldShowCheckboxes"
-            :should-show-delete-menu="shouldShowDeleteMenu"
-            :should-show-polling-toggle="shouldShowPollingToggle"
-            :soft-deletes="softDeletes"
-            @start-polling="startPolling"
-            @stop-polling="stopPolling"
-            :toggle-select-all="toggleSelectAll"
-            :toggle-select-all-matching="toggleSelectAllMatching"
-            :toggle-polling="togglePolling"
-            :trashed="trashed"
-            :trashed-changed="trashedChanged"
-            :trashed-parameter="trashedParameter"
-            :update-per-page-changed="updatePerPageChanged"
-            :via-many-to-many="viaManyToMany"
-            :via-resource="viaResource"
-            :show-search="showSearch"
-            :search="search"
-            @searched="performLazySearch"
-        />
-
         <LoadingView :loading="loading" :variant="!resourceResponse ? 'default' : 'overlay'">
             <IndexErrorDialog
                 v-if="resourceResponseError != null"
@@ -106,7 +57,6 @@
         InteractsWithQueryString,
     } from '@/mixins';
     import ResourceTable from '@/components/ResourceTable';
-    import ResourceTableToolbar from '../components/ResourceTableToolbar';
 
     import { computed } from 'vue';
 
@@ -118,7 +68,7 @@
 
         mixins: [Deletable, InteractsWithResourceInformation, SupportsPolling, InteractsWithQueryString],
 
-        components: { ResourceTable, ResourceTableToolbar },
+        components: { ResourceTable },
 
         props: {
             ...mapProps(['resourceName', 'viaResource', 'viaResourceId', 'viaRelationship', 'relationshipType']),
@@ -296,7 +246,6 @@
                     this.initializeTrashed();
                     this.initializeOrdering();
                 }
-                await this.initializeFilters(onCreated);
                 await this.getResources();
                 await this.getAuthorizationToRelate();
                 this.enableWatchers();
